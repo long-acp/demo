@@ -1,24 +1,30 @@
-#include<iostream>
-#include<algorithm>
+#include<bits/stdc++.h>
 
 using namespace std;
 
-/*long long gcd(long long a,long long b)
+string nextbin(string s)
 {
-	if(b==0) return a;
-	return gcd(b,a%b);
-}*/
+	int j=s.size()-1;
+	while(j>=0&&s[j]!='0')
+	{
+		s[j]='0';
+		j--;
+	}
+	if(s[j]=='0') s[j]='1';
+	return s;
+	
+}
 
 int main()
 {
 	int t;
 	cin>>t;
+	string s;
 	while(t--)
 	{
-		long long a,b;
-		cin>>a>>b;
-		long long c=__gcd(a,b);
-		cout<<c<<" "<<a*b/c<<endl;
+		cin>>s;
+		s=nextbin(s);
+		cout<<s<<endl;
 	}
 
 }
