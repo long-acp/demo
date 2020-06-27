@@ -1,72 +1,64 @@
 #include<bits/stdc++.h>
-
+#define ll long long
 using namespace std;
 
-int n,k;
-int a[10][10],b[10],index=0;
-vector <int> val;
-bool check;
-
-void nextbn()
-{
-	int i=n-2;
-    while(i>=0&&b[i]>b[i+1]) i--;
-    if (i==-1) check=false;
-	else
-	{
-		int j=n-1;
-		while(b[i]>b[j])  j--;
-	    swap(b[i],b[j]);
-	    int x=i+1,y=n-1;
-	    while(x<y)
-		{
-	    	swap(b[x],b[y]);
-	    	x++;
-	    	y--;
-		}
+struct node 
+{ 
+    int data; 
+    node *left, *right; 
+    node(int x)
+    {
+    	data = x;
+    	left = NULL;
+    	right = NULL;
 	}
+};
+ll path(node *root,ll &ref){
+    if(!root) return 0;
+	ll l = path(root->left,ref);
+	ll r = path(root->right,ref);
+	ll loc = max(max(l,r)+(ll)root->data,(ll)root->data);
+	ll glob = max(loc,l+r+(ll)root->data);
+	ref = max(glob,ref);
+	return loc;
 }
-
-
+ll maxPathSum(node *root)
+{
+    ll ref = -10000000000000;
+    ll x = path(root,ref);
+    return ref;
+} 
 int main()
 {
-	
-	cin>>n>>k;
-	
-	for(int i=0;i<n;i++)
+	int t=1;
+	cin>>t;
+	while(t--)
 	{
-		for(int j=0;j<n;j++)
+		int n;
+		cin>>n;
+		map<int,node *> m;
+		node *root = NULL;
+		while(n--)
 		{
-			cin>>a[i][j];
-		}
-	}
-	for(int i=0;i<n;i++) b[i]=i+1;
-	check=true;
-	while(check)
-	{
-		int sum=0;
-		for(int i=0;i<n;i++)
-		{
-			sum+=a[i][b[i]-1];
-		}
-		if(sum==k)
-		{
-			for(int i=0;i<n;i++)
+			int a,b;
+			char c;
+			cin>>a>>b>>c;
+			node *father;
+			if(m.find(a) == m.end())
 			{
-				val.push_back(b[i]);
+				father = new node(a);
+				m[a] = father;
+				if(root == NULL)
+				root = father;
 			}
-			index++;
+			else father = m[a];
+			node *son = new node(b);
+			if(c=='L')
+				father->left = son;
+			else if(c=='R')
+				father->right = son;
+			m[b] = son;
 		}
-		nextbn();
+		cout<<maxPathSum(root)<<endl;
 	}
-	cout<<index<<endl;
-	for(int i=0;i<val.size();i+=n)
-	{
-		for(int j=i;j<n+i;j++) cout<<val[j]<<" ";
-		cout<<endl;
-	}
-	
-
-	return 0;
 }
-
